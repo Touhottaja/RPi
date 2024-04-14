@@ -1,0 +1,2 @@
+adafruit-circuitpython-ssd1306==2.12.17
+pillow==10.3.0

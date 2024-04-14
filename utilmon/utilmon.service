@@ -1,0 +1,9 @@
+[Unit]
+Description=Utility monitor based on Adafruit's ssd1306 driver
+
+[Service]
+ExecStart=[<Path to venv>]/bin/python3 /[<Path to utilmon>]/utilmon/utilmon.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
