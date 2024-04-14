@@ -11,8 +11,8 @@ A simple utility monitor using a small I2C display (SSD13). Based on Adafruit's 
 - `SDA` to `PIN 3`
 
 ### Steps
-0. ssh to RPi
-1. Enable I2C interface:
+0. ssh to RPi  
+1. Enable I2C interface  
 ```sh
 $ sudo raspi-config
 ```
@@ -24,26 +24,26 @@ Reboot the device for the new setting to take effect:
 $ reboot
 ```
 - ssh back to RPi after its done booting
-2. Create a new venv
+2. Create a new venv  
 ```sh
 $ python3 -m venv utilmon_venv
 $ source utilmon_venv/bin/activate
 ```
-3. Install requirements (see `requirements.txt`)
+3. Install requirements (see `requirements.txt`)  
 ```sh
 $ pip3 install -r requirements.txt
 ```
-4. **Optional** Clone the Adafruit's SSD1306 library from GitHub
+4. **Optional** Clone the Adafruit's SSD1306 library from GitHub  
 ```sh
 $ git clone https://github.com/adafruit/Adafruit_CircuitPython_SSD1306.git
 ```
-5. Run `utilmon.py` (based on stats example in Adafruit's SSD1306 library)
+5. Run `utilmon.py` (based on stats example in Adafruit's SSD1306 library). 
 ```sh
 # Clone the utilmon.py from this dir to your RPi, or use the stats example from
 # Adafruit.
 $ python3 utilmon.py
 ```
-6. **Optional** Run as service
+6. **Optional** Run as service  
 Modify the path in `utilmon.service`
 ```sh
 [Unit]
@@ -56,7 +56,7 @@ Restart=always
 [Install]
 WantedBy=multi-user.target
 ```
-Start the service `/lib/systemd/system`
+Start the service  
 ```sh
 $ sudo cp utilmon.service /lib/systemd/system
 $ sudo systemctl daemon-reload
