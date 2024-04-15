@@ -10,6 +10,12 @@ A simple utility monitor using a small I2C display (SSD13). Based on Adafruit's 
 - `SCL` to `PIN 5`
 - `SDA` to `PIN 3`
 
+### Configuration
+You can set the display on/off cycle duration, and change the refresh time in `utilmon.py`:
+- `DISPLAY_TIME_OFF_S` defines how long the display is off each cycle
+- `DISPLAY_TIME_ON_S` defines how long the display is on each cycle
+- `REFRESH_TIME_S` defines how often the values are updated when the display is on
+
 ### Steps
 0. ssh to RPi  
 1. Enable I2C interface  
