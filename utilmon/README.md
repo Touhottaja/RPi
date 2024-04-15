@@ -16,6 +16,8 @@ You can set the display on/off cycle duration, and change the refresh time in `u
 - `DISPLAY_TIME_ON_S` defines how long the display is on each cycle
 - `REFRESH_TIME_S` defines how often the values are updated when the display is on
 
+You can configure sleep hours (i.e., hours when the display remains off) in `utilmon.py` by modifying the `SLEEP_HOURS` list.
+
 ### Steps
 0. ssh to RPi  
 1. Enable I2C interface  
