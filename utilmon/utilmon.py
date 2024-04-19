@@ -12,6 +12,7 @@ import adafruit_ssd1306
 DISPLAY_TIME_OFF_S = 60 * 9
 DISPLAY_TIME_ON_S = 30
 REFRESH_TIME_S = 0.5
+SWITCH_SCREEN_TIME_S = 10
 SLEEP_HOURS = [23, 0, 1, 2, 3, 4, 5, 6, 7, 8]
 
 # Create the I2C interface.
@@ -66,30 +67,64 @@ def main() -> None:
         if dt.hour not in SLEEP_HOURS:
             display_on_time_left = DISPLAY_TIME_ON_S
             while display_on_time_left:
-                draw.rectangle((0, 0, width, height), outline=0, fill=0)
-                # Shell scripts for system monitoring from here:
-                # https://unix.stackexchange.com/questions/119126/command-to-display-memory-usage-disk-usage-and-cpu-load
-                #cmd = "hostname -I | cut -d' ' -f1"
-                #IP = subprocess.check_output(cmd, shell=True).decode("utf-8")
-                cmd = 'cut -f 1 -d " " /proc/loadavg'
-                CPU = subprocess.check_output(cmd, shell=True).decode("utf-8")
-                cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%s MB\", $3,$2}'"
-                MemUsage = subprocess.check_output(cmd, shell=True).decode("utf-8")
-                cmd = "vcgencmd measure_temp | grep  -o -E '[[:digit:]].*'"
-                Temp = subprocess.check_output(cmd, shell=True).decode("utf-8")
+                # Display resource usage
+                show_resources_time_s = SWITCH_SCREEN_TIME_S
+                while show_resources_time_s:
+                    draw.rectangle((0, 0, width, height), outline=0, fill=0)
+                    # Shell scripts for system monitoring from here:
+                    # https://unix.stackexchange.com/questions/119126/command-to-display-memory-usage-disk-usage-and-cpu-load
+                    #cmd = "hostname -I | cut -d' ' -f1"
+                    #IP = subprocess.check_output(cmd, shell=True).decode("utf-8")
+                    cmd = 'cut -f 1 -d " " /proc/loadavg'
+                    CPU = subprocess.check_output(cmd, shell=True).decode("utf-8")
+                    cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%s MB\", $3,$2}'"
+                    MemUsage = subprocess.check_output(cmd, shell=True).decode("utf-8")
+                    cmd = "vcgencmd measure_temp | grep  -o -E '[[:digit:]].*'"
+                    Temp = subprocess.check_output(cmd, shell=True).decode("utf-8")
 
-                # Write the text.
-                #draw.text((x, top + 0), "IP: " + IP, font=font, fill=255)
-                draw.text((x, top + 0), "CPU: " + CPU, font=font, fill=255)
-                draw.text((x, top + 10), MemUsage, font=font, fill=255)
-                draw.text((x, top + 20), "Temp: " + Temp, font=font, fill=255)
+                    # Write the text.
+                    #draw.text((x, top + 0), "IP: " + IP, font=font, fill=255)
+                    draw.text((x, top + 0), "CPU: " + CPU, font=font, fill=255)
+                    draw.text((x, top + 10), MemUsage, font=font, fill=255)
+                    draw.text((x, top + 20), "Temp: " + Temp, font=font, fill=255)
 
-                # Display image.
-                disp.image(image)
-                disp.show()
+                    # Display image.
+                    disp.image(image)
+                    disp.show()
 
-                time.sleep(REFRESH_TIME_S)
-                display_on_time_left -= REFRESH_TIME_S
+                    time.sleep(REFRESH_TIME_S)
+                    show_resources_time_s -= REFRESH_TIME_S
+                    display_on_time_left -= REFRESH_TIME_S
+
+                # Display current time and uptime
+                show_current_time_s = SWITCH_SCREEN_TIME_S
+                while show_current_time_s:
+                    dt = datetime.datetime.now()
+                    draw.rectangle((0, 0, width, height), outline=0, fill=0)
+                    hour_str = str(dt.hour)
+                    if dt.hour == 0:
+                        hour_str = "00"
+
+                    current_time_str = hour_str + ":" + str(dt.minute) + ":" + str(dt.second)
+                    current_date_str = str(dt.day) + "-" + str(dt.month) + "-" + str(dt.year)
+
+                    cmd = "uptime -p"
+                    uptime = subprocess.check_output(cmd, shell=True).decode("utf-8")
+                    uptime = uptime.replace("days", "d").replace("hours","h").replace("minutes", "min")
+
+                    # Write the text
+                    draw.rectangle((0, 0, width, height), outline=0, fill=0)
+                    draw.text((0, top + 0), current_time_str, font=font, fill=255)
+                    draw.text((0, top + 10), current_date_str, font=font, fill=255)
+                    draw.text((0, top + 20), uptime, font=font, fill=255)
+
+                    # Display image.
+                    disp.image(image)
+                    disp.show()
+
+                    time.sleep(REFRESH_TIME_S)
+                    show_current_time_s -= REFRESH_TIME_S
+                    display_on_time_left -= REFRESH_TIME_S
 
         # Turn display "off"
         clear_display()
@@ -98,3 +133,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
