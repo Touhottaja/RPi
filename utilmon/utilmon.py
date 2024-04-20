@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw, ImageFont
 import adafruit_ssd1306
 
 DISPLAY_TIME_OFF_S = 60 * 9
-DISPLAY_TIME_ON_S = 30
+DISPLAY_TIME_ON_S = 40
 REFRESH_TIME_S = 0.5
 SWITCH_SCREEN_TIME_S = 10
 SLEEP_HOURS = [23, 0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -66,7 +66,7 @@ def main() -> None:
         dt = datetime.datetime.now()
         if dt.hour not in SLEEP_HOURS:
             display_on_time_left = DISPLAY_TIME_ON_S
-            while display_on_time_left:
+            while display_on_time_left and display_on_time_left:
                 # Display resource usage
                 show_resources_time_s = SWITCH_SCREEN_TIME_S
                 while show_resources_time_s:
@@ -98,14 +98,22 @@ def main() -> None:
 
                 # Display current time and uptime
                 show_current_time_s = SWITCH_SCREEN_TIME_S
-                while show_current_time_s:
-                    dt = datetime.datetime.now()
+                while show_current_time_s and display_on_time_left:
                     draw.rectangle((0, 0, width, height), outline=0, fill=0)
-                    hour_str = str(dt.hour)
-                    if dt.hour == 0:
-                        hour_str = "00"
 
-                    current_time_str = hour_str + ":" + str(dt.minute) + ":" + str(dt.second)
+                    dt = datetime.datetime.now()
+                    hour_str = str(dt.hour)
+                    min_str = str(dt.minute)
+                    sec_str = str(dt.second)
+
+                    if len(hour_str) == 1:
+                        hour_str = "0" + hour_str
+                    if len(min_str) == 1:
+                        min_str = "0" + min_str
+                    if len(sec_str) == 1:
+                        sec_str = "0" + sec_str
+
+                    current_time_str = hour_str + ":" + min_str + ":" + sec_str
                     current_date_str = str(dt.day) + "-" + str(dt.month) + "-" + str(dt.year)
 
                     cmd = "uptime -p"
@@ -117,7 +125,7 @@ def main() -> None:
                     draw.text((0, top + 0), current_time_str, font=font, fill=255)
                     draw.text((0, top + 10), current_date_str, font=font, fill=255)
                     draw.text((0, top + 20), uptime, font=font, fill=255)
-
+ 
                     # Display image.
                     disp.image(image)
                     disp.show()
