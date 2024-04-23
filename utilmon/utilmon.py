@@ -117,8 +117,8 @@ def main() -> None:
                     current_date_str = str(dt.day) + "-" + str(dt.month) + "-" + str(dt.year)
 
                     cmd = "uptime -p"
-                    uptime = subprocess.check_output(cmd, shell=True).decode("utf-8")
-                    uptime = uptime.replace("days", "d").replace("hours","h").replace("minutes", "min")
+                    uptime = subprocess.check_output(cmd, shell=True).decode("utf-8").lower()
+                    uptime = uptime.replace("week", "w").replace("day", "d").replace("hours", "h").replace("minutes", "m")
 
                     # Write the text
                     draw.rectangle((0, 0, width, height), outline=0, fill=0)
