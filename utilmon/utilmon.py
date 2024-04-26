@@ -79,7 +79,7 @@ def main() -> None:
                     #IP = subprocess.check_output(cmd, shell=True).decode("utf-8")
                     cmd = 'cut -f 1 -d " " /proc/loadavg'
                     CPU = subprocess.check_output(cmd, shell=True).decode("utf-8")
-                    cmd = "free -m | awk 'NR==2{printf \"Mem: %s/%s MB\", $3,$2}'"
+                    cmd = "free -m | awk 'NR==2{printf \"Mem: %.2f/%.2f GB\", $3/1024,$2/1024}'"
                     MemUsage = subprocess.check_output(cmd, shell=True).decode("utf-8")
                     cmd = "vcgencmd measure_temp | grep  -o -E '[[:digit:]].*'"
                     Temp = subprocess.check_output(cmd, shell=True).decode("utf-8")
