@@ -15,6 +15,8 @@ REFRESH_TIME_S = 0.5
 SWITCH_SCREEN_TIME_S = 10
 SLEEP_HOURS = [23, 0, 1, 2, 3, 4, 5, 6, 7, 8]
 
+LOAD_THRESHOLD = 2
+
 # Create the I2C interface.
 i2c = busio.I2C(SCL, SDA)
 
@@ -95,6 +97,10 @@ def main() -> None:
                     time.sleep(REFRESH_TIME_S)
                     show_resources_time_s -= REFRESH_TIME_S
                     display_on_time_left -= REFRESH_TIME_S
+
+                    # If LOAD is high, keep display on for continuous monitoring
+                    if float(CPU) > LOAD_THRESHOLD:
+                        display_on_time_left = REFRESH_TIME_S
 
                 # Display current time and uptime
                 show_current_time_s = SWITCH_SCREEN_TIME_S

@@ -16,6 +16,7 @@ You can set the display on/off cycle duration, and change the refresh time in `u
 - `DISPLAY_TIME_ON_S` defines how long the display is on each cycle
 - `REFRESH_TIME_S` defines how often the values are updated when the display is on
 - `SWITCH_SCREEN_TIME_S` defines how long each screen is shown
+- `LOAD_THRESHOLD` if the load goes above this, display is kept on
 
 You can configure sleep hours (i.e., hours when the display remains off) in `utilmon.py` by modifying the `SLEEP_HOURS` list.
 
